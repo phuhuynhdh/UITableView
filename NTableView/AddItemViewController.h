@@ -13,5 +13,6 @@
 
 @property (strong, retain) IBOutlet UITextField* textField;
 @property ViewController * delegate;
+@property (strong, retain) IBOutlet UITextView* textView;
 
 @end

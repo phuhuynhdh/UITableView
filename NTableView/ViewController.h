@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Task.h"
 
 @protocol ViewControllerDelegate <NSObject>
 - (void) saveItem:(NSString*) oldValue with:(NSString*)newValue;
-- (void) addItemWithString:(NSString*) value;
+- (void) addItemWithString:(Task*) value;
 
 @end
 

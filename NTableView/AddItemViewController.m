@@ -15,6 +15,7 @@
 @implementation AddItemViewController
 @synthesize textField;
 @synthesize delegate;
+@synthesize textView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,7 +28,11 @@
 }
 
 - (IBAction)addItem:(id)sender{
-    [delegate addItemWithString:textField.text];
+    Task* task = [[Task alloc] init];
+    [task setTaskName:textField.text];
+    [task setDescription:textView.text];
+    
+    [delegate addItemWithString:task];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

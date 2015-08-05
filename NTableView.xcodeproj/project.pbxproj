@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3633CE271B7260DE007B3E5E /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 3633CE261B7260DE007B3E5E /* Task.m */; };
 		363499FD1B7111BD00D472B8 /* AddItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 363499FC1B7111BD00D472B8 /* AddItemViewController.m */; };
 		36349A001B71156300D472B8 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 363499FF1B71156300D472B8 /* DetailViewController.m */; };
 		363AE3521B70AE7700C3A0A9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 363AE3511B70AE7700C3A0A9 /* main.m */; };
@@ -29,6 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3633CE251B7260DE007B3E5E /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
+		3633CE261B7260DE007B3E5E /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
 		363499FB1B7111BD00D472B8 /* AddItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddItemViewController.h; sourceTree = "<group>"; };
 		363499FC1B7111BD00D472B8 /* AddItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddItemViewController.m; sourceTree = "<group>"; };
 		363499FE1B71156300D472B8 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 				363499FC1B7111BD00D472B8 /* AddItemViewController.m */,
 				363499FE1B71156300D472B8 /* DetailViewController.h */,
 				363499FF1B71156300D472B8 /* DetailViewController.m */,
+				3633CE251B7260DE007B3E5E /* Task.h */,
+				3633CE261B7260DE007B3E5E /* Task.m */,
 				363AE3591B70AE7700C3A0A9 /* Main.storyboard */,
 				363AE35C1B70AE7700C3A0A9 /* Images.xcassets */,
 				363AE35E1B70AE7700C3A0A9 /* LaunchScreen.xib */,
@@ -233,6 +238,7 @@
 				363AE3581B70AE7700C3A0A9 /* ViewController.m in Sources */,
 				363499FD1B7111BD00D472B8 /* AddItemViewController.m in Sources */,
 				363AE3551B70AE7700C3A0A9 /* AppDelegate.m in Sources */,
+				3633CE271B7260DE007B3E5E /* Task.m in Sources */,
 				363AE3521B70AE7700C3A0A9 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "AddItemViewController.h"
 #import "DetailViewController.h"
+#import "Task.h"
 
 @interface ViewController()
 
@@ -23,7 +24,22 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     // Init items
-    self->items = [NSMutableArray arrayWithObjects:@"Meat", @"Fish", @"Chicken", @"Port", nil];
+    Task* task1 = [[Task alloc] init];
+    [task1 setTaskName:@"Shopping"];
+    [task1 setComplete:FALSE];
+    [task1 setDescription:@"Go to shopping with my wife to buy an address"];
+    
+    Task* task2 = [[Task alloc] init];
+    [task2 setTaskName:@"Remember to bring your document"];
+    [task2 setComplete:FALSE];
+    [task2 setDescription:@"Prepare for meeting at 7:00 AM"];
+    
+    Task* task3 = [[Task alloc] init];
+    [task3 setTaskName:@"Buy a pencil"];
+    [task3 setComplete:FALSE];
+    [task3 setDescription:@"Buy a pencil at book shop nearby"];
+    
+    self->items = [NSMutableArray arrayWithObjects:task1, task2, task3, nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,11 +62,20 @@
     UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier: cellIdenfity];
     
     if (cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: cellIdenfity];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier: cellIdenfity];
     }
+    // Get task at index path row
+    Task* task = self->items[indexPath.row];
     
-    cell.textLabel.text = self->items[indexPath.row];
+    cell.textLabel.text = [task taskName];
+    cell.detailTextLabel.text = [task description];
     
+    // Show completed tasks/Uncomplete tasks
+    if( [task complete] == TRUE){ // completed task
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
     
     return cell;
     
@@ -97,11 +122,22 @@
     [tableView reloadData];
 }
 
-- (void) addItemWithString:(NSString *)value{
+- (void) addItemWithString:(Task *)value{
     [items addObject:value];
     
     [tableView reloadData];
 }
 
+- (void) tableView:(UITableView*) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    Task* task = [items objectAtIndex:indexPath.row];
+    
+    if ([task complete]){
+        [task setComplete:FALSE];
+    }else{
+        [task setComplete:TRUE];
+    }
+    
+    [self->tableView reloadData];
+}
 
 @end
