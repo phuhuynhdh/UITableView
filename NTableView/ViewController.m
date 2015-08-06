@@ -77,6 +77,9 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
+    // show reorder control
+    cell.showsReorderControl = YES;
+    
     return cell;
     
 }
@@ -138,6 +141,34 @@
     }
     
     [self->tableView reloadData];
+}
+
+- (IBAction)editTableView:(id)sender{
+    
+    if(![tableView isEditing]){
+        [tableView setEditing:TRUE animated:TRUE];
+        UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEdit)];
+        self.navigationItem.leftBarButtonItem = barButtonItem;
+        
+    }
+}
+
+- (void) doneEdit{
+    [tableView setEditing:FALSE animated:TRUE];
+    
+    // re-draw edit button
+    UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editTableView:)];
+    self.navigationItem.leftBarButtonItem = barButtonItem;
+}
+
+- (BOOL)tableView:(UITableView*) tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
+    return TRUE;
+}
+
+- (void)tableView:(UITableView*) tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
+    
+    // swap row
+    [items exchangeObjectAtIndex:sourceIndexPath.row withObjectAtIndex:destinationIndexPath.row];
 }
 
 @end
