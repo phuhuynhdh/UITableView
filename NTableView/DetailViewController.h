@@ -8,13 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "ViewController.h"
+#import "Task.h"
 
 @interface DetailViewController : UIViewController{
     
 }
 
-@property NSString * item;
+@property Task * item;
 @property (strong, retain) IBOutlet UITextField* textField;
+@property (strong, retain) IBOutlet UITextView* description;
+
 @property ViewController * delegate;
 
 @end

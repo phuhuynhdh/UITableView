@@ -10,6 +10,7 @@
 #import "AddItemViewController.h"
 #import "DetailViewController.h"
 #import "Task.h"
+#import "TaskTableViewCell.h"
 
 @interface ViewController()
 
@@ -57,28 +58,41 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    static NSString * cellIdenfity = @"Cell";
+    static NSString * cellIdenfity = @"TaskCell";
     
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier: cellIdenfity];
+    TaskTableViewCell * cell = (TaskTableViewCell*)[tableView dequeueReusableCellWithIdentifier: cellIdenfity];
     
     if (cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier: cellIdenfity];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"TaskCell" owner:self options:nil];
+        
+        cell = [nib objectAtIndex:0];
     }
     // Get task at index path row
     Task* task = self->items[indexPath.row];
     
-    cell.textLabel.text = [task taskName];
-    cell.detailTextLabel.text = [task description];
+    cell.name.text = task.taskName;
+    cell.description.text = task.description;
     
     // Show completed tasks/Uncomplete tasks
     if( [task complete] == TRUE){ // completed task
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        // cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        UIImage * doneImage = [UIImage imageNamed:@"Done.png"];
+        [cell.tickImage setImage:doneImage forState:UIControlStateNormal];
+        
     }else{
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        // cell.accessoryType = UITableViewCellAccessoryNone;
+        UIImage * doneImage = [UIImage imageNamed:@"" ];
+        [cell.tickImage setImage:doneImage forState:UIControlStateNormal];
     }
+    // add tag for button
+    cell.tickImage.tag = indexPath.row;
+    [cell.tickImage addTarget:self action:@selector(makeTaskdone:) forControlEvents:UIControlEventTouchUpInside];
     
     // show reorder control
     cell.showsReorderControl = YES;
+    
+    // set cell as view detail
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
     
@@ -116,7 +130,7 @@
     }
 }
 
-- (void) saveItem:(NSString*) oldValue with:(NSString*)newValue{
+- (void) saveItem:(Task*) oldValue with:(Task*)newValue{
     //index
     NSInteger index = [items indexOfObject:oldValue];
     [items removeObjectAtIndex:index];
@@ -132,16 +146,17 @@
 }
 
 - (void) tableView:(UITableView*) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    Task* task = [items objectAtIndex:indexPath.row];
+    //Build a segue string based on the selected cell
+    NSString *segueString = @"ViewDetail";
+    //Since contentArray is an array of strings, we can use it to build a unique
+    //identifier for each segue.
     
-    if ([task complete]){
-        [task setComplete:FALSE];
-    }else{
-        [task setComplete:TRUE];
-    }
+    //Perform a segue.
+    [self performSegueWithIdentifier:segueString
+                              sender:[items objectAtIndex:indexPath.row]];
     
-    [self->tableView reloadData];
 }
+
 
 - (IBAction)editTableView:(id)sender{
     
@@ -169,6 +184,24 @@
     
     // swap row
     [items exchangeObjectAtIndex:sourceIndexPath.row withObjectAtIndex:destinationIndexPath.row];
+}
+
+
+- (CGFloat)tableView:(UITableView*) tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 75.0;
+}
+
+- (void) makeTaskdone:(UIButton*) sender{
+    
+    Task* task = [items objectAtIndex:sender.tag];
+    
+    if ([task complete]){
+        [task setComplete:FALSE];
+    }else{
+        [task setComplete:TRUE];
+    }
+    
+    [self->tableView reloadData];
 }
 
 @end

@@ -16,13 +16,16 @@
 
 @synthesize item = item;
 @synthesize textField = textField;
+@synthesize description;
 @synthesize delegate;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // Update text field
-    textField.text = item;
+    textField.text = item.taskName;
+    description.text = item.description;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,7 +34,11 @@
 }
 
 - (IBAction)saveItem:(id)sender{
-    [delegate saveItem:item with:textField.text];
+    Task* newItem = [[Task alloc] init];
+    [newItem setTaskName:textField.text];
+    [newItem setDescription:description.text];
+    
+    [delegate saveItem:item with:newItem];
     // Dismiss view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
     
