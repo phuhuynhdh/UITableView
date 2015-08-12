@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		360248471B7867690053C740 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 360248461B7867690053C740 /* CoreData.framework */; };
+		3602484A1B7868360053C740 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 360248481B7868360053C740 /* Model.xcdatamodeld */; };
 		3633062B1B748AA200551CEE /* Done.png in Resources */ = {isa = PBXBuildFile; fileRef = 3633062A1B748AA200551CEE /* Done.png */; };
 		3633921C1B7352EC00A534A8 /* TaskCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3633921B1B7352EC00A534A8 /* TaskCell.xib */; };
 		3633921F1B73559500A534A8 /* TaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3633921E1B73559500A534A8 /* TaskTableViewCell.m */; };
-		3633CE271B7260DE007B3E5E /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 3633CE261B7260DE007B3E5E /* Task.m */; };
+		3633E5AA1B7B01B7000F524A /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 3633E5A91B7B01B7000F524A /* Task.m */; };
 		363499FD1B7111BD00D472B8 /* AddItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 363499FC1B7111BD00D472B8 /* AddItemViewController.m */; };
 		36349A001B71156300D472B8 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 363499FF1B71156300D472B8 /* DetailViewController.m */; };
 		363AE3521B70AE7700C3A0A9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 363AE3511B70AE7700C3A0A9 /* main.m */; };
@@ -33,12 +35,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		360248461B7867690053C740 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		360248491B7868360053C740 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		3633062A1B748AA200551CEE /* Done.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Done.png; sourceTree = "<group>"; };
 		3633921B1B7352EC00A534A8 /* TaskCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TaskCell.xib; sourceTree = "<group>"; };
 		3633921D1B73559500A534A8 /* TaskTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskTableViewCell.h; sourceTree = "<group>"; };
 		3633921E1B73559500A534A8 /* TaskTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskTableViewCell.m; sourceTree = "<group>"; };
-		3633CE251B7260DE007B3E5E /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
-		3633CE261B7260DE007B3E5E /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
+		3633E5A81B7B01B7000F524A /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../Task.h; sourceTree = "<group>"; };
+		3633E5A91B7B01B7000F524A /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Task.m; path = ../Task.m; sourceTree = "<group>"; };
 		363499FB1B7111BD00D472B8 /* AddItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddItemViewController.h; sourceTree = "<group>"; };
 		363499FC1B7111BD00D472B8 /* AddItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddItemViewController.m; sourceTree = "<group>"; };
 		363499FE1B71156300D472B8 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
@@ -63,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				360248471B7867690053C740 /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +84,7 @@
 		363AE3431B70AE7700C3A0A9 = {
 			isa = PBXGroup;
 			children = (
+				360248461B7867690053C740 /* CoreData.framework */,
 				363AE34E1B70AE7700C3A0A9 /* NTableView */,
 				363AE3681B70AE7700C3A0A9 /* NTableViewTests */,
 				363AE34D1B70AE7700C3A0A9 /* Products */,
@@ -105,12 +111,13 @@
 				363499FC1B7111BD00D472B8 /* AddItemViewController.m */,
 				363499FE1B71156300D472B8 /* DetailViewController.h */,
 				363499FF1B71156300D472B8 /* DetailViewController.m */,
-				3633CE251B7260DE007B3E5E /* Task.h */,
-				3633CE261B7260DE007B3E5E /* Task.m */,
 				3633921D1B73559500A534A8 /* TaskTableViewCell.h */,
 				3633921E1B73559500A534A8 /* TaskTableViewCell.m */,
+				3633E5A81B7B01B7000F524A /* Task.h */,
+				3633E5A91B7B01B7000F524A /* Task.m */,
 				3633921B1B7352EC00A534A8 /* TaskCell.xib */,
 				363AE3591B70AE7700C3A0A9 /* Main.storyboard */,
+				360248481B7868360053C740 /* Model.xcdatamodeld */,
 				3633062A1B748AA200551CEE /* Done.png */,
 				363AE35C1B70AE7700C3A0A9 /* Images.xcassets */,
 				363AE35E1B70AE7700C3A0A9 /* LaunchScreen.xib */,
@@ -250,9 +257,10 @@
 				36349A001B71156300D472B8 /* DetailViewController.m in Sources */,
 				363AE3581B70AE7700C3A0A9 /* ViewController.m in Sources */,
 				363499FD1B7111BD00D472B8 /* AddItemViewController.m in Sources */,
+				3602484A1B7868360053C740 /* Model.xcdatamodeld in Sources */,
+				3633E5AA1B7B01B7000F524A /* Task.m in Sources */,
 				3633921F1B73559500A534A8 /* TaskTableViewCell.m in Sources */,
 				363AE3551B70AE7700C3A0A9 /* AppDelegate.m in Sources */,
-				3633CE271B7260DE007B3E5E /* Task.m in Sources */,
 				363AE3521B70AE7700C3A0A9 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -460,6 +468,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		360248481B7868360053C740 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				360248491B7868360053C740 /* Model.xcdatamodel */,
+			);
+			currentVersion = 360248491B7868360053C740 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 363AE3441B70AE7700C3A0A9 /* Project object */;
 }

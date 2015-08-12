@@ -24,7 +24,7 @@
     
     // Update text field
     textField.text = item.taskName;
-    description.text = item.description;
+    description.text = item.taskDescription;
     
 }
 
@@ -34,11 +34,11 @@
 }
 
 - (IBAction)saveItem:(id)sender{
-    Task* newItem = [[Task alloc] init];
-    [newItem setTaskName:textField.text];
-    [newItem setDescription:description.text];
     
-    [delegate saveItem:item with:newItem];
+    item.taskName = textField.text;
+    item.taskDescription = description.text;
+    
+    [delegate saveItem:item with:item];
     // Dismiss view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
     

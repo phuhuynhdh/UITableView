@@ -28,11 +28,21 @@
 }
 
 - (IBAction)addItem:(id)sender{
-    Task* task = [[Task alloc] init];
-    [task setTaskName:textField.text];
-    [task setDescription:textView.text];
+    // Get Application Delete
+    AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
+    // Get Managed Object Context
+    NSManagedObjectContext * managedObjectContext = [appDelegate managedObjectContext];
+    
+    Task* task = [NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:managedObjectContext];
+    
+    //[task setValue:textField.text forKey:@"taskName"];
+    // [task setValue:textView.text forKey:@"taskDescription"];
+    task.taskName = textField.text;
+    task.taskDescription = textView.text;
+    task.complete = [NSNumber  numberWithInt:0];
     
     [delegate addItemWithString:task];
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

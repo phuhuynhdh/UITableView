@@ -11,6 +11,7 @@
 #import "DetailViewController.h"
 #import "Task.h"
 #import "TaskTableViewCell.h"
+#import "AppDelegate.h"
 
 @interface ViewController()
 
@@ -20,27 +21,24 @@
 @implementation ViewController
 @synthesize tableView;
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    // Init items
-    Task* task1 = [[Task alloc] init];
-    [task1 setTaskName:@"Shopping"];
-    [task1 setComplete:FALSE];
-    [task1 setDescription:@"Go to shopping with my wife to buy an address"];
+    AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext * managedContext = [appDelegate managedObjectContext];
     
-    Task* task2 = [[Task alloc] init];
-    [task2 setTaskName:@"Remember to bring your document"];
-    [task2 setComplete:FALSE];
-    [task2 setDescription:@"Prepare for meeting at 7:00 AM"];
+    NSEntityDescription * taskEntity = [NSEntityDescription entityForName:@"Task" inManagedObjectContext:managedContext];
     
-    Task* task3 = [[Task alloc] init];
-    [task3 setTaskName:@"Buy a pencil"];
-    [task3 setComplete:FALSE];
-    [task3 setDescription:@"Buy a pencil at book shop nearby"];
+    NSFetchRequest * request = [[NSFetchRequest alloc] init];
+    [request setEntity:taskEntity];
     
-    self->items = [NSMutableArray arrayWithObjects:task1, task2, task3, nil];
+    NSArray * fetchObjects = [managedContext executeFetchRequest:request error:nil];
+    
+    items = [NSMutableArray arrayWithArray:fetchObjects];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,10 +69,10 @@
     Task* task = self->items[indexPath.row];
     
     cell.name.text = task.taskName;
-    cell.description.text = task.description;
+    cell.description.text = task.taskDescription;
     
     // Show completed tasks/Uncomplete tasks
-    if( [task complete] == TRUE){ // completed task
+    if( [task.complete intValue] == 1){ // completed task
         // cell.accessoryType = UITableViewCellAccessoryCheckmark;
         UIImage * doneImage = [UIImage imageNamed:@"Done.png"];
         [cell.tickImage setImage:doneImage forState:UIControlStateNormal];
@@ -101,11 +99,23 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Remove data
+        AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
+        NSManagedObjectContext * context = [appDelegate managedObjectContext];
+        
+        Task * taskToDelete = [items objectAtIndex:indexPath.row];
+        
+        // Mark object as deleted in ManagedObjectConext
+        [context deleteObject:taskToDelete];
+        
+        // Remove object in array
         [self->items removeObjectAtIndex:indexPath.row];
         
         //add code here for when you hit delete
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        // Save to persistent store
+        [appDelegate saveContext];
+        
         
     }
 }
@@ -136,13 +146,31 @@
     [items removeObjectAtIndex:index];
     [items insertObject:newValue atIndex:index];
     
+    AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
+   
+    //[context deleteObject:oldValue];
+    //[context insertObject:newValue];
+    oldValue.taskName = newValue.taskName;
+    oldValue.taskDescription = newValue.taskDescription;
+    oldValue.complete = newValue.complete;
+    
+    // save persistant store
+    [appDelegate saveContext];
+    
     [tableView reloadData];
 }
 
-- (void) addItemWithString:(Task *)value{
-    [items addObject:value];
+- (void) addItemWithString:(Task *)task{
+    // Get Application Delete
+    AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
+  
+    // [task setValue:0 forKey:@"complete"];
     
+    [items addObject:task];
     [tableView reloadData];
+    
+    // Save to persistent store.
+    [appDelegate saveContext];
 }
 
 - (void) tableView:(UITableView*) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -174,6 +202,7 @@
     // re-draw edit button
     UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editTableView:)];
     self.navigationItem.leftBarButtonItem = barButtonItem;
+    
 }
 
 - (BOOL)tableView:(UITableView*) tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -195,10 +224,10 @@
     
     Task* task = [items objectAtIndex:sender.tag];
     
-    if ([task complete]){
-        [task setComplete:FALSE];
+    if ([task.complete intValue] == 1){
+        [task setComplete:[NSNumber numberWithInt:0]];
     }else{
-        [task setComplete:TRUE];
+        [task setComplete:[NSNumber numberWithInt:1]];
     }
     
     [self->tableView reloadData];
