@@ -34,6 +34,12 @@
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
     [request setEntity:taskEntity];
     
+    // Sort by Task Name
+    NSSortDescriptor *sortByTaskName = [NSSortDescriptor sortDescriptorWithKey:@"taskName" ascending:true];
+    NSArray * sorts = [NSArray arrayWithObjects:sortByTaskName, nil];
+    
+    [request setSortDescriptors:sorts];
+    
     NSArray * fetchObjects = [managedContext executeFetchRequest:request error:nil];
     
     items = [NSMutableArray arrayWithArray:fetchObjects];
@@ -231,6 +237,10 @@
     }
     
     [self->tableView reloadData];
+    
+    // Save to persitent store
+    AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate saveContext];
 }
 
 @end
