@@ -38,11 +38,10 @@
     item.taskName = textField.text;
     item.taskDescription = description.text;
     
+    
     [delegate saveItem:item with:item];
     // Dismiss view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
-    
-    
 }
 
 @end

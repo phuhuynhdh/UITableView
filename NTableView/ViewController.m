@@ -42,7 +42,32 @@
     
     NSArray * fetchObjects = [managedContext executeFetchRequest:request error:nil];
     
-    items = [NSMutableArray arrayWithArray:fetchObjects];
+    // Initialise item dictinonary
+    items = [[NSMutableDictionary alloc] init];
+    
+    for(Task * task in fetchObjects){
+        
+        NSString * taskName = task.taskName;
+        NSString * firstLetter = [taskName substringToIndex:1];
+        firstLetter = [firstLetter uppercaseString];
+        
+        // Get an array by first letter
+        NSMutableArray * values = [items valueForKey:firstLetter];
+        // If the array is empty then initailise it
+        if (values == nil){
+            values = [[NSMutableArray alloc] init];
+        }
+        [values addObject:task];
+        
+        [items setObject:values forKey:firstLetter];
+    }
+    
+    // Init titles for section
+    sectionTitles = [NSMutableArray arrayWithArray:[items allKeys]];
+    
+    // Init a-z Index titles
+    // aZIndexTitles = [NSArray array];
+    aZIndexTitles = [NSArray arrayWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
     
     
 }
@@ -53,11 +78,18 @@
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+    return [sectionTitles count];
+}
+
+- (NSString*) tableView:(UITableView*) tableView titleForHeaderInSection:(NSInteger)section{
+    return [sectionTitles objectAtIndex:section];
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [self->items count];
+    
+    NSString* titleSection = [sectionTitles objectAtIndex:section];
+    NSMutableArray * itemsInSection = [items objectForKey:titleSection];
+    return [itemsInSection count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -72,7 +104,11 @@
         cell = [nib objectAtIndex:0];
     }
     // Get task at index path row
-    Task* task = self->items[indexPath.row];
+    
+    NSString * titleSection = [sectionTitles objectAtIndex:indexPath.section];
+    NSMutableArray * itemsInSection = [items objectForKey:titleSection];
+    
+    Task* task = [itemsInSection objectAtIndex:indexPath.row];
     
     cell.name.text = task.taskName;
     cell.description.text = task.taskDescription;
@@ -89,7 +125,8 @@
         [cell.tickImage setImage:doneImage forState:UIControlStateNormal];
     }
     // add tag for button
-    cell.tickImage.tag = indexPath.row;
+    [[cell.tickImage layer ]setValue:indexPath forKeyPath:@"indexPath"];
+    
     [cell.tickImage addTarget:self action:@selector(makeTaskdone:) forControlEvents:UIControlEventTouchUpInside];
     
     // show reorder control
@@ -108,20 +145,23 @@
         AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext * context = [appDelegate managedObjectContext];
         
-        Task * taskToDelete = [items objectAtIndex:indexPath.row];
+        NSString * sectionTitle = [sectionTitles objectAtIndex:indexPath.section];
+        NSMutableArray * itemsInSection = [items objectForKey:sectionTitle];
+        
+        Task * taskToDelete = [itemsInSection objectAtIndex:indexPath.row];
         
         // Mark object as deleted in ManagedObjectConext
         [context deleteObject:taskToDelete];
         
         // Remove object in array
-        [self->items removeObjectAtIndex:indexPath.row];
+        [itemsInSection removeObjectAtIndex:indexPath.row];
         
         //add code here for when you hit delete
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
         // Save to persistent store
         [appDelegate saveContext];
-        
+    
         
     }
 }
@@ -131,11 +171,16 @@
         // Get destination view controller
         DetailViewController * detailViewController = [segue destinationViewController];
         
+        
         // Get selected row on table view then set to item on Detail View controller
         NSInteger index = tableView.indexPathForSelectedRow.row;
+        NSInteger indexSection = tableView.indexPathForSelectedRow.section;
+        
+        NSString * sectionTitle = [sectionTitles objectAtIndex:indexSection];
+        NSMutableArray * itemsInSection = [items objectForKey:sectionTitle];
         
         
-        [detailViewController setItem:[items objectAtIndex:index]];
+        [detailViewController setItem:[itemsInSection objectAtIndex:index]];
         [detailViewController setDelegate:self];
         
         
@@ -144,50 +189,66 @@
         
         [addItemViewController setDelegate:self];
     }
+    
 }
 
 - (void) saveItem:(Task*) oldValue with:(Task*)newValue{
-    //index
-    NSInteger index = [items indexOfObject:oldValue];
-    [items removeObjectAtIndex:index];
-    [items insertObject:newValue atIndex:index];
     
     AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
    
-    //[context deleteObject:oldValue];
-    //[context insertObject:newValue];
-    oldValue.taskName = newValue.taskName;
-    oldValue.taskDescription = newValue.taskDescription;
-    oldValue.complete = newValue.complete;
+    //oldValue.taskName = newValue.taskName;
+    //oldValue.taskDescription = newValue.taskDescription;
+    //oldValue.complete = newValue.complete;
     
     // save persistant store
     [appDelegate saveContext];
     
     [tableView reloadData];
+    
 }
 
 - (void) addItemWithString:(Task *)task{
+    
     // Get Application Delete
     AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
   
     // [task setValue:0 forKey:@"complete"];
+    // Get Task Name
+    NSString * taskName = task.taskName;
+    NSString * firstLetter = [taskName substringToIndex:1];
+    firstLetter = [firstLetter uppercaseString];
     
-    [items addObject:task];
+    // Check the first letter is exsting in array item
+    NSMutableArray * itemsForFirstLetter = [items objectForKey:firstLetter];
+    if (itemsForFirstLetter == nil){
+        itemsForFirstLetter = [[NSMutableArray alloc] init];
+    }
+    
+    // Insert new task to item for first letter
+    [itemsForFirstLetter addObject:task];
+    
+    [items setObject:itemsForFirstLetter forKey:firstLetter];
+    
     [tableView reloadData];
     
     // Save to persistent store.
     [appDelegate saveContext];
+    
 }
 
 - (void) tableView:(UITableView*) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     //Build a segue string based on the selected cell
     NSString *segueString = @"ViewDetail";
     //Since contentArray is an array of strings, we can use it to build a unique
     //identifier for each segue.
     
+    NSString * titleSection = [sectionTitles objectAtIndex:indexPath.section];
+    NSMutableArray * itemsInSeciton = [items objectForKey:titleSection];
     //Perform a segue.
     [self performSegueWithIdentifier:segueString
-                              sender:[items objectAtIndex:indexPath.row]];
+                              sender:[itemsInSeciton objectAtIndex:indexPath.row]];
+    
     
 }
 
@@ -200,6 +261,7 @@
         self.navigationItem.leftBarButtonItem = barButtonItem;
         
     }
+    
 }
 
 - (void) doneEdit{
@@ -212,13 +274,13 @@
 }
 
 - (BOOL)tableView:(UITableView*) tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
-    return TRUE;
+    return FALSE;
 }
 
 - (void)tableView:(UITableView*) tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
     
     // swap row
-    [items exchangeObjectAtIndex:sourceIndexPath.row withObjectAtIndex:destinationIndexPath.row];
+    //[items exchangeObjectAtIndex:sourceIndexPath.row withObjectAtIndex:destinationIndexPath.row];
 }
 
 
@@ -227,8 +289,13 @@
 }
 
 - (void) makeTaskdone:(UIButton*) sender{
+    // tableView sele
+    NSIndexPath * index = [[sender layer] valueForKey:@"indexPath"];
     
-    Task* task = [items objectAtIndex:sender.tag];
+    NSString * titleSection = [sectionTitles objectAtIndex:index.section];
+    NSMutableArray * itemsInSection = [items objectForKey:titleSection];
+    
+    Task* task = [itemsInSection objectAtIndex:index.row];
     
     if ([task.complete intValue] == 1){
         [task setComplete:[NSNumber numberWithInt:0]];
@@ -241,6 +308,15 @@
     // Save to persitent store
     AppDelegate * appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate saveContext];
+    
+}
+
+- (NSArray*) sectionIndexTitlesForTableView:(UITableView*) tableView{
+    return aZIndexTitles;
+}
+
+- (NSInteger) tableView:(UITableView*) tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index{
+    return [sectionTitles indexOfObject:title];
 }
 
 @end

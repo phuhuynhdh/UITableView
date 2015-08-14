@@ -16,7 +16,9 @@
 @end
 
 @interface ViewController : UIViewController<ViewControllerDelegate>{
-    NSMutableArray * items;
+    NSMutableDictionary * items;
+    NSMutableArray * sectionTitles;
+    NSArray * aZIndexTitles;
 }
 @property (strong, retain) IBOutlet UITableView * tableView;
 @end
